@@ -1,0 +1,26 @@
+﻿AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: Uma função lambda simples monitorando um bucket s3
+Resources:
+  gerulambdaexample:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: main.lambda_handler
+      Runtime: python3.6
+      CodeUri: ./function
+      Description: Uma função lambda simples monitorando um bucket s3
+      MemorySize: 128
+      Timeout: 3
+      Role: 'arn:aws:iam::232667596449:role/service-role/geru-lambda-example'
+      Events:
+        UploadFiles:
+          Type: S3
+          Properties:
+            Bucket: !Ref BucketExample
+            Events:
+              - 's3:ObjectCreated:Put'
+
+  BucketExample:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: geru-lambda-example
